@@ -1,4 +1,5 @@
-import { Item, GildedRose } from '@/gilded-rose';
+import { GildedRose } from '@/gilded-rose';
+import { Item } from '@/models/item';
 
 describe('Gilded Rose test cases', () => {
   it('should foo', () => {
@@ -15,7 +16,6 @@ describe('Gilded Rose test cases', () => {
     expect(items[0].quality).toBe(0);
   });
 
-  // todo fix it
   it('should Once the sell by date has passed, Quality degrades twice as fast', () => {
     const gildedRose = new GildedRose([new Item('foo', 0, 4)]);
     const items = gildedRose.updateQuality();
@@ -65,3 +65,21 @@ describe('Gilded Rose test cases', () => {
   });
 
 });
+
+describe('backstage test case', () => {
+  it('should increase quality by 1 when selling more than 10 days', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 11, 1)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].name).toBe('Backstage passes to a TAFKAL80ETC concert');
+    expect(items[0].sellIn).toBe(10);
+    expect(items[0].quality).toBe(2);
+  });
+  
+  it('should increase quality by 2 when selling more than 6 days', () => {
+    const gildedRose = new GildedRose([new Item('Backstage passes to a TAFKAL80ETC concert', 6, 1)]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].name).toBe('Backstage passes to a TAFKAL80ETC concert');
+    expect(items[0].sellIn).toBe(5);
+    expect(items[0].quality).toBe(3);
+  });
+})
